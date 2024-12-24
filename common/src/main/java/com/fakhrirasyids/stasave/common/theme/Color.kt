@@ -1,4 +1,4 @@
-package com.fakhrirasyids.stasave.ui.theme
+package com.fakhrirasyids.stasave.common.theme
 
 import androidx.compose.ui.graphics.Color
 

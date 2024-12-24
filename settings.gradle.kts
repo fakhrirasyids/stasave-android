@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "Stasave"
 include(":app")
 include(":core")
+include(":platform")
+include(":common")
