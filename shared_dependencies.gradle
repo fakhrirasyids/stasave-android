@@ -1,4 +1,8 @@
 dependencies {
+
+    // Base Resources
+    implementation(project(":common"))
+
     // Navigation Compose
     implementation(libs.androidx.navigation.compose)
     androidTestImplementation(libs.androidx.navigation.testing)

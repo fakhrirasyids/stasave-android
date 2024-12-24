@@ -1,23 +1,18 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
-apply(from = "../shared_dependencies.gradle")
-
 android {
-    namespace = "com.fakhrirasyids.stasave"
-    compileSdk = 35
+    namespace = "com.fakhrirasyids.stasave.common"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.fakhrirasyids.stasave"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -42,6 +37,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":platform"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.material3)
 }

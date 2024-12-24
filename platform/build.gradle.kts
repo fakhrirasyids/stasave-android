@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
@@ -7,17 +7,14 @@ plugins {
 apply(from = "../shared_dependencies.gradle")
 
 android {
-    namespace = "com.fakhrirasyids.stasave"
+    namespace = "com.fakhrirasyids.stasave.platform"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.fakhrirasyids.stasave"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -43,5 +40,4 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":platform"))
 }
