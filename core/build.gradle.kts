@@ -1,19 +1,27 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
 }
+
+apply(from = "../shared_dependencies.gradle")
 
 android {
     namespace = "com.fakhrirasyids.stasave.core"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
 
+        buildConfigField("String", "DATABASE_NAME", "\"Stasave.DB\"")
+        buildConfigField("String", "STASAVE_DATABASE_KEY", "\"stasave_key_db_226\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
-
+    buildFeatures {
+        buildConfig = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -33,11 +41,21 @@ android {
 }
 
 dependencies {
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    // Room
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.paging.runtime.ktx)
+    annotationProcessor(libs.androidx.room.compiler)
+
+    // SQLCipher
+    implementation(libs.android.database.sqlcipher)
+    implementation(libs.androidx.sqlite.ktx)
+
+    // DocumentFile
+    implementation (libs.androidx.documentfile)
 }
