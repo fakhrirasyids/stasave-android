@@ -11,7 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         buildConfigField("String", "DATABASE_NAME", "\"Stasave.DB\"")
         buildConfigField("String", "STASAVE_DATABASE_KEY", "\"stasave_key_db_226\"")

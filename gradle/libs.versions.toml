@@ -1,5 +1,7 @@
 [versions]
+accompanistPermissions = "0.37.0"
 agp = "8.7.3"
+coilCompose = "2.2.0"
 documentfile = "1.0.1"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
@@ -15,8 +17,8 @@ androidDatabaseSqlcipher = "4.4.0"
 datastorePreferencesCore = "1.1.1"
 featureDelivery = "2.1.0"
 featureDeliveryKtx = "2.1.0"
-koinAndroid = "3.5.6"
-koinAndroidxCompose = "3.5.6"
+koinAndroid = "4.0.0"
+koinAndroidxCompose = "4.0.0"
 kotlinxCoroutinesAndroid = "1.7.3"
 kotlinxCoroutinesCore = "1.7.3"
 lottieCompose = "4.2.0"
@@ -30,9 +32,12 @@ ksp = "2.0.0-1.0.21"
 pagingRuntimeKtx = "3.3.5"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-documentfile = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-video = { module = "io.coil-kt:coil-video", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

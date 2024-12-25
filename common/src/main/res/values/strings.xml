@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Stasave</string>
+
+    <!-- Home Screen-->
+    <string name="home_set_permission">Set Permission</string>
+
+    <!-- Screen Error Message -->
+    <string name="saved_media_permission_not_setted">Whatsapp Media Folder is not setted.</string>
+    <string name="home_permission_not_setted">Permission is not setted.</string>
+    <string name="screen_whatsapp_directory">Whatsapp Folder is Incorrect!</string>
+
+    <!-- System Error Message -->
+    <string name="invalid_whatsapp_directory">The specified WhatsApp URI is not a valid directory.</string>
+</resources>

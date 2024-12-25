@@ -11,7 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -40,4 +40,11 @@ android {
 
 dependencies {
     implementation(project(":core"))
+
+    // Accompanist Permissions
+    implementation(libs.accompanist.permissions)
+
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.video)
 }
