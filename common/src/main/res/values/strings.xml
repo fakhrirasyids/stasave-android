@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Stasave</string>
+
+    <!-- Home Screen-->
+    <string name="home_permission_not_setted">Permission is not setted.</string>
+    <string name="home_set_permission">Set Permission</string>
+</resources>
