@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface StasaveRepository {
     // Preferences Utilities
+    suspend fun getWhatsappUri(): Flow<String>
     suspend fun saveWhatsappUri(whatsappUri: String)
     suspend fun clearPreferences()
 

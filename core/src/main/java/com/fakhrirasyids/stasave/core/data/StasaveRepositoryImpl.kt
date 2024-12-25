@@ -2,7 +2,9 @@ package com.fakhrirasyids.stasave.core.data
 
 import android.content.Context
 import android.content.Intent
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.map
 import com.fakhrirasyids.stasave.core.data.local.LocalDataSource
 import com.fakhrirasyids.stasave.core.data.local.room.entity.MediaEntity
@@ -21,7 +23,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
-import java.io.File
 
 internal class StasaveRepositoryImpl(
     private val localDataSource: LocalDataSource
@@ -41,24 +42,24 @@ internal class StasaveRepositoryImpl(
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
                 )
 
-                val whatsappDirectory = File(whatsappUriParsed.path.toString())
-                if (!whatsappDirectory.exists() || !whatsappDirectory.isDirectory) {
-                    throw IllegalArgumentException("The specified WhatsApp URI is not a valid directory.")
+                val whatsappDirectory = DocumentFile.fromTreeUri(context, whatsappUriParsed)
+                if (whatsappDirectory == null || !whatsappDirectory.exists() || !whatsappDirectory.isDirectory) {
+                    throw IllegalArgumentException(ContextCompat.getString(context, com.fakhrirasyids.stasave.common.R.string.invalid_whatsapp_directory))
                 }
 
                 runBlocking { localDataSource.deleteAllMedias() }
 
                 val whatsappMediaList = mutableListOf<MediaEntity>()
-                whatsappDirectory.listFiles()?.forEach { file ->
+                whatsappDirectory.listFiles().forEach { file ->
                     if (file.name != ".nomedia" && file.isFile) {
                         val fileType = when {
-                            FileConstants.getFileExtension(file.name) == "mp4" -> MediaType.VIDEO.name.lowercase()
+                            FileConstants.getFileExtension(file.name ?: "") == "mp4" -> MediaType.VIDEO.name.lowercase()
                             else -> MediaType.IMAGE.name.lowercase()
                         }
 
                         val mediaEntity = MediaEntity(
-                            uri = file.toUri().toString(),
-                            fileName = file.name,
+                            uri = file.uri.toString(),
+                            fileName = file.name ?: "",
                             fileType = fileType
                         )
                         whatsappMediaList.add(mediaEntity)
@@ -74,6 +75,9 @@ internal class StasaveRepositoryImpl(
                 emit(Result.Error(e.message ?: "Unknown Error"))
             }
         }.flowOn(Dispatchers.IO)
+
+    override suspend fun getWhatsappUri() =
+        localDataSource.getWhatsappUri()
 
     override suspend fun saveWhatsappUri(whatsappUri: String) {
         localDataSource.saveWhatsappUri(whatsappUri)

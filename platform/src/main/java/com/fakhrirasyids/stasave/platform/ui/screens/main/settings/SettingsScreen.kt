@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.fakhrirasyids.stasave.common.theme.StasaveTheme
 import com.fakhrirasyids.stasave.platform.ui.components.TopBanner
-import com.fakhrirasyids.stasave.platform.utils.PlatformConstants
+import com.fakhrirasyids.stasave.platform.utils.enums.MainScreen
 
 @Composable
 fun SettingsScreen(
@@ -16,7 +16,7 @@ fun SettingsScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        TopBanner(title = PlatformConstants.MainScreen.Settings.name)
+        TopBanner(title = MainScreen.Settings.name)
     }
 }
 

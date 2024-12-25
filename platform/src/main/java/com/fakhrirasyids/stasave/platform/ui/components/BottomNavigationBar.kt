@@ -20,7 +20,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.fakhrirasyids.stasave.platform.data.models.BottomBarItem
-import com.fakhrirasyids.stasave.platform.utils.PlatformConstants
+import com.fakhrirasyids.stasave.platform.utils.enums.MainScreen
 
 @Composable
 fun BottomNavigationBar(
@@ -41,15 +41,15 @@ fun BottomNavigationBar(
         ) {
             val navigationItems = listOf(
                 BottomBarItem(
-                    title = PlatformConstants.MainScreen.Home.name,
+                    title = MainScreen.Home.name,
                     icon = Icons.Default.Home
                 ),
                 BottomBarItem(
-                    title = PlatformConstants.MainScreen.Saved.name,
+                    title = MainScreen.Saved.name,
                     icon = Icons.Default.Menu
                 ),
                 BottomBarItem(
-                    title = PlatformConstants.MainScreen.Settings.name,
+                    title = MainScreen.Settings.name,
                     icon = Icons.Default.Settings
                 ),
             )

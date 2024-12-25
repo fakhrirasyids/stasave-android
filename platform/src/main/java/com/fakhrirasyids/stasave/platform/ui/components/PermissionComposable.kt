@@ -23,7 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PermissionComposable(modifier: Modifier = Modifier) {
+fun PermissionComposable(
+    modifier: Modifier = Modifier,
+    title: String,
+    onRequestPermissionClick: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -31,7 +35,7 @@ fun PermissionComposable(modifier: Modifier = Modifier) {
     ) {
         Card(
             modifier = Modifier
-                .padding(16.dp), // Padding around the card
+                .padding(16.dp),
             colors = CardColors(
                 containerColor = MaterialTheme.colorScheme.background,
                 contentColor = MaterialTheme.colorScheme.onBackground,
@@ -57,14 +61,12 @@ fun PermissionComposable(modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    text = stringResource(id = com.fakhrirasyids.stasave.common.R.string.home_permission_not_setted)
+                    text = title
                 )
 
                 Button(
                     modifier = modifier.padding(8.dp),
-                    onClick = {
-
-                    }
+                    onClick = onRequestPermissionClick
                 ) {
                     Text(
                         text = stringResource(id = com.fakhrirasyids.stasave.common.R.string.home_set_permission),

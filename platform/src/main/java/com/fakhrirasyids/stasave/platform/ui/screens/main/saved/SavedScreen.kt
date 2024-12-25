@@ -8,7 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.fakhrirasyids.stasave.common.theme.StasaveTheme
 import com.fakhrirasyids.stasave.platform.ui.components.PermissionComposable
 import com.fakhrirasyids.stasave.platform.ui.components.TopBanner
-import com.fakhrirasyids.stasave.platform.utils.PlatformConstants
+import com.fakhrirasyids.stasave.platform.utils.enums.MainScreen
 
 @Composable
 fun SavedScreen(
@@ -17,9 +17,9 @@ fun SavedScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        TopBanner(title = PlatformConstants.MainScreen.Saved.name)
+        TopBanner(title = MainScreen.Saved.name)
 
-        PermissionComposable()
+//        PermissionComposable()
     }
 }
 
