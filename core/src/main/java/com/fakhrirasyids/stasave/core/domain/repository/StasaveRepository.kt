@@ -17,6 +17,6 @@ internal interface StasaveRepository {
     // Saved Media Utilities
     suspend fun insertMedia(context: Context, mediaModel: MediaModel): Flow<Result<Boolean>>
     suspend fun deleteMedia(context: Context, mediaModel: MediaModel): Flow<Result<Boolean>>
-    fun getAllImageMedia(): Flow<Result<List<MediaModel>>>
-    fun getAllVideoMedia(): Flow<Result<List<MediaModel>>>
+    fun getAllImageMedia(context: Context): Flow<Result<List<MediaModel>>>
+    fun getAllVideoMedia(context: Context): Flow<Result<List<MediaModel>>>
 }

@@ -17,15 +17,17 @@ import com.fakhrirasyids.stasave.platform.ui.components.BottomNavigationBar
 import com.fakhrirasyids.stasave.platform.ui.screens.main.home.HomeScreen
 import com.fakhrirasyids.stasave.platform.ui.screens.main.home.HomeViewModel
 import com.fakhrirasyids.stasave.platform.ui.screens.main.saved.SavedScreen
+import com.fakhrirasyids.stasave.platform.ui.screens.main.saved.SavedViewModel
 import com.fakhrirasyids.stasave.platform.ui.screens.main.settings.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    onNavigateToMediaPreview: ((Int, String, List<MediaModel>) -> Unit)? = null,
+    onNavigateToMediaPreview: ((Int, String, List<MediaModel>, Boolean) -> Unit)? = null,
 ) {
     val homeViewModel: HomeViewModel = koinViewModel()
+    val savedViewModel: SavedViewModel = koinViewModel()
 
     val whatsappUri by homeViewModel.whatsappUri
     val selectedMenuTitle =
@@ -36,6 +38,8 @@ fun MainScreen(
     LaunchedEffect(whatsappUri) {
         if (whatsappUri.isNotEmpty()) {
             homeViewModel.getAllWhatsappImages(context)
+            savedViewModel.getAllSavedImages(context)
+            savedViewModel.getAllSavedVideos(context)
         }
     }
 
@@ -50,13 +54,19 @@ fun MainScreen(
                     HomeScreen(
                         viewModel = homeViewModel,
                         onNavigateToMediaPreview = { index, mediaType, mediaList ->
-                            onNavigateToMediaPreview?.invoke(index, mediaType, mediaList)
+                            onNavigateToMediaPreview?.invoke(index, mediaType, mediaList, false)
                         }
                     )
                 }
 
                 com.fakhrirasyids.stasave.platform.utils.enums.MainScreen.Saved.name -> {
-                    SavedScreen()
+                    SavedScreen(
+                        homeViewModel = homeViewModel,
+                        savedViewModel = savedViewModel,
+                        onNavigateToMediaPreview = { index, mediaType, mediaList ->
+                            onNavigateToMediaPreview?.invoke(index, mediaType, mediaList, true)
+                        }
+                    )
                 }
 
                 com.fakhrirasyids.stasave.platform.utils.enums.MainScreen.Settings.name -> {

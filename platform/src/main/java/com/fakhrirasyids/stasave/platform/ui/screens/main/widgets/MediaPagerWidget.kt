@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.fakhrirasyids.stasave.core.domain.model.MediaModel
 import com.fakhrirasyids.stasave.platform.ui.components.ErrorContent
@@ -94,8 +95,7 @@ fun MediaPagerWidget(
                 HorizontalPager(
                     state = pagerState,
                     modifier = modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxSize()
+                        .weight(1F)
                 ) { page ->
                     val mediaList = if (page == 0) {
                         whatsappImageMedias
@@ -103,15 +103,19 @@ fun MediaPagerWidget(
                         whatsappVideoMedias
                     }
 
-                    MediaGridWidget(
-                        modifier = modifier
-                            .align(Alignment.CenterHorizontally)
-                            .weight(1f),
-                        mediaList = mediaList,
-                        onNavigateToMediaPreview = { index, mediaType ->
-                            onNavigateToMediaPreview?.invoke(index, mediaType, mediaList)
-                        }
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        MediaGridWidget(
+                            modifier = modifier,
+                            mediaList = mediaList,
+                            onNavigateToMediaPreview = { index, mediaType ->
+                                onNavigateToMediaPreview?.invoke(index, mediaType, mediaList)
+                            }
+                        )
+                    }
                 }
             }
         }

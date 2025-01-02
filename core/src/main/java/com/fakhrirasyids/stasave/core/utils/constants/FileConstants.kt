@@ -122,10 +122,15 @@ internal object FileConstants {
     fun getFileExtension(fileName: String) =
         fileName.substringAfterLast('.', "")
 
-    private fun isMediaExist(fileName: String): Boolean {
+    fun Context.isMediaExist(fileName: String): Boolean {
         val targetFile = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-            "stasave/$fileName"
+            "${
+                ContextCompat.getString(
+                    this,
+                    com.fakhrirasyids.stasave.common.R.string.app_name
+                )
+            }/$fileName"
         )
         return targetFile.exists()
     }

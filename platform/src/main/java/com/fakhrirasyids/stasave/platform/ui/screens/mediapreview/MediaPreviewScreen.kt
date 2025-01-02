@@ -33,6 +33,7 @@ fun MediaPreviewScreen(
     selectedItemIndex: Int,
     mediaTypeName: String,
     mediaList: List<MediaModel>,
+    isFromSaved: Boolean,
     onBackClick: () -> Unit,
     viewModel: MediaPreviewViewModel = koinViewModel(),
 ) {
@@ -75,6 +76,7 @@ fun MediaPreviewScreen(
                 selectedMediaIndex = selectedItemIndex,
                 mediaTypeName = mediaTypeName,
                 mediaList = mediaList,
+                isFromSaved = isFromSaved,
                 onDownloadClick = { mediaModel ->
                     viewModel.saveMedia(context, mediaModel)
                 },

@@ -21,9 +21,9 @@ internal interface LocalDataSource {
 
     // Saved Media Utilities
     suspend fun insertMedia(mediaEntity: SavedMediaEntity)
-    suspend fun deleteMedia(id: Int)
-    fun getAllImageMedia(): LiveData<List<SavedMediaEntity>>
-    fun getAllVideoMedia(): LiveData<List<SavedMediaEntity>>
+    suspend fun deleteMedia(uri: String)
+    fun getAllImageMedia(): Flow<List<SavedMediaEntity>>
+    fun getAllVideoMedia(): Flow<List<SavedMediaEntity>>
 }
 
 internal class LocalDataSourceImpl(
@@ -57,8 +57,8 @@ internal class LocalDataSourceImpl(
         savedMediaDao.insertMedia(mediaEntity)
     }
 
-    override suspend fun deleteMedia(id: Int) {
-        savedMediaDao.deleteMedia(id)
+    override suspend fun deleteMedia(uri: String) {
+        savedMediaDao.deleteMedia(uri)
     }
 
     override fun getAllImageMedia() =
