@@ -18,7 +18,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.fakhrirasyids.stasave.core.domain.model.MediaModel
 import com.fakhrirasyids.stasave.core.utils.enums.MediaType
 import com.fakhrirasyids.stasave.platform.ui.components.MediaPreviewContent
-import com.fakhrirasyids.stasave.platform.ui.screens.mediapreview.MediaPreviewViewModel
 import com.fakhrirasyids.stasave.platform.utils.constants.ExoPlayerConstants.rememberExoPlayersPool
 
 @Composable
@@ -27,7 +26,10 @@ fun MediaPreviewPagerWidget(
     selectedMediaIndex: Int,
     mediaTypeName: String,
     mediaList: List<MediaModel>,
-    viewModel: MediaPreviewViewModel
+    isFromSaved: Boolean = false,
+    onDownloadClick: ((MediaModel) -> Unit)? = null,
+    onDeleteClick: ((MediaModel) -> Unit)? = null,
+    onShareClick: ((MediaModel) -> Unit)? = null
 ) {
     val pagerState = rememberPagerState(pageCount = { mediaList.size })
 
@@ -65,7 +67,17 @@ fun MediaPreviewPagerWidget(
                 modifier = modifier.fillMaxSize(),
                 mediaModel = mediaList[selectedPageIndex],
                 exoPlayer = exoPlayer.value,
-                isPlaying = selectedPage == selectedPageIndex
+                isPlaying = selectedPage == selectedPageIndex,
+                isFromSaved = isFromSaved,
+                onDownloadClick = { mediaModel ->
+                    onDownloadClick?.invoke(mediaModel)
+                },
+                onDeleteClick = { mediaModel ->
+                    onDeleteClick?.invoke(mediaModel)
+                },
+                onShareClick = { mediaModel ->
+                    onShareClick?.invoke(mediaModel)
+                }
             )
         }
     }

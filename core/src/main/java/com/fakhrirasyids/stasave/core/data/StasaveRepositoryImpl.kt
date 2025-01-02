@@ -113,7 +113,7 @@ internal class StasaveRepositoryImpl(
         try {
             val isSuccessfullyDeleted = context.deleteMedia(mediaModel.fileName)
             if (isSuccessfullyDeleted) {
-                localDataSource.deleteMedia(mediaModel.id)
+                runBlocking{ localDataSource.deleteMedia(mediaModel.id) }
                 emit(Result.Success(true))
             } else {
                 emit(Result.Error("Failed to delete media"))

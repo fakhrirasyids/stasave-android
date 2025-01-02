@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val viewModelModules = module {
     viewModel { HomeViewModel(get(), get()) }
-    viewModel { MediaPreviewViewModel(get(), get()) }
+    viewModel { MediaPreviewViewModel(get()) }
 }

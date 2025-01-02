@@ -7,8 +7,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.fakhrirasyids.stasave.core.domain.model.MediaModel
+import com.fakhrirasyids.stasave.core.utils.constants.FileConstants.saveMediaBeforeQ
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -41,7 +43,12 @@ internal object FileConstants {
             put(MediaStore.MediaColumns.DISPLAY_NAME, model.fileName)
             put(
                 MediaStore.MediaColumns.RELATIVE_PATH,
-                "${Environment.DIRECTORY_DOCUMENTS}/stasave"
+                "${Environment.DIRECTORY_DOCUMENTS}/${
+                    ContextCompat.getString(
+                        this@saveMediaOnAndroidQAndAbove,
+                        com.fakhrirasyids.stasave.common.R.string.app_name
+                    )
+                }"
             )
         }
 
@@ -60,7 +67,7 @@ internal object FileConstants {
             val fileName = uri.lastPathSegment ?: return false
             val destinationDir = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                "stasave"
+                ContextCompat.getString(this, com.fakhrirasyids.stasave.common.R.string.app_name)
             )
 
             if (!destinationDir.exists()) destinationDir.mkdirs()
