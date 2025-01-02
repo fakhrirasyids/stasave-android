@@ -36,7 +36,8 @@ fun MediaPagerWidget(
     whatsappImageMedias: List<MediaModel>,
     whatsappVideoMedias: List<MediaModel>,
     isLoading: Boolean,
-    isErrorMessage: String
+    isErrorMessage: String,
+    onNavigateToMediaPreview: ((Int, String, List<MediaModel>) -> Unit)? = null
 ) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { HomeSavedTabs.entries.size })
@@ -106,7 +107,10 @@ fun MediaPagerWidget(
                         modifier = modifier
                             .align(Alignment.CenterHorizontally)
                             .weight(1f),
-                        mediaList = mediaList
+                        mediaList = mediaList,
+                        onNavigateToMediaPreview = { index, mediaType ->
+                            onNavigateToMediaPreview?.invoke(index, mediaType, mediaList)
+                        }
                     )
                 }
             }

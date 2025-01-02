@@ -29,6 +29,7 @@ import com.fakhrirasyids.stasave.core.utils.enums.MediaType
 
 @Composable
 fun MediaGridItem(
+    modifier: Modifier = Modifier,
     mediaModel: MediaModel
 ) {
     val imageLoader = ImageLoader.Builder(LocalContext.current)
@@ -47,22 +48,13 @@ fun MediaGridItem(
     }
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                painter = imagePainter,
-                contentDescription = "Media Preview",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
-
             Image(
                 painter = imagePainter,
                 contentDescription = "Media Preview",

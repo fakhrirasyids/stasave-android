@@ -4,6 +4,10 @@
     <!-- Home Screen-->
     <string name="home_set_permission">Set Permission</string>
 
+    <!-- Media Preview Screen-->
+    <string name="media_preview_detail_image">Image Detail</string>
+    <string name="media_preview_detail_video">Video Detail</string>
+
     <!-- Screen Error Message -->
     <string name="saved_media_permission_not_setted">Whatsapp Media Folder is not setted.</string>
     <string name="home_permission_not_setted">Permission is not setted.</string>

@@ -42,7 +42,7 @@ fun StasaveTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        darkTheme -> DarkColorScheme
+        darkTheme -> LightColorScheme // Change Later, For testing only
         else -> LightColorScheme
     }
 
