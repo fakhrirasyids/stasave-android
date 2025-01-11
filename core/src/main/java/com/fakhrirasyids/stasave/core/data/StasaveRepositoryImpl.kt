@@ -2,12 +2,9 @@ package com.fakhrirasyids.stasave.core.data
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import com.fakhrirasyids.stasave.core.data.local.LocalDataSource
 import com.fakhrirasyids.stasave.core.data.local.room.entity.MediaEntity
 import com.fakhrirasyids.stasave.core.domain.model.MediaModel
@@ -26,7 +23,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 
 internal class StasaveRepositoryImpl(
@@ -111,11 +107,12 @@ internal class StasaveRepositoryImpl(
         emit(Result.Loading)
         try {
             val isSuccessfullySaved = context.saveMedia(mediaModel)
-            if (isSuccessfullySaved) {
+            if (isSuccessfullySaved != null) {
+                mediaModel.uri = isSuccessfullySaved
                 runBlocking { localDataSource.insertMedia(mediaModel.toSavedMediaEntity()) }
                 emit(Result.Success(true))
             } else {
-                emit(Result.Error("Failed to save media"))
+                emit(Result.Error("Failed to Download Media!"))
             }
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Unknown Error"))
@@ -133,7 +130,7 @@ internal class StasaveRepositoryImpl(
                 runBlocking { localDataSource.deleteMedia(mediaModel.uri) }
                 emit(Result.Success(true))
             } else {
-                emit(Result.Error("Failed to delete media"))
+                emit(Result.Error("Media already Deleted"))
             }
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Unknown Error"))
@@ -148,12 +145,13 @@ internal class StasaveRepositoryImpl(
                     .map { it.map { entity -> entity.toMediaModel() } }.first().toMutableList()
             }
 
-            val filteredMediaList = mediaList.filter { mediaModel ->
-                val isExist = context.isMediaExist(mediaModel.fileName)
-                if (!isExist) {
-                    runBlocking { localDataSource.deleteMedia(mediaModel.uri) }
+            val filteredMediaList = mediaList.filter { media ->
+                if (context.isMediaExist(media) == null) {
+                    localDataSource.deleteMedia(media.uri)
+                    false
+                } else {
+                    true
                 }
-                isExist
             }
 
             emit(Result.Success(filteredMediaList))
@@ -170,12 +168,13 @@ internal class StasaveRepositoryImpl(
                     .map { it.map { entity -> entity.toMediaModel() } }.first().toMutableList()
             }
 
-            val filteredMediaList = mediaList.filter { mediaModel ->
-                val isExist = context.isMediaExist(mediaModel.fileName)
-                if (!isExist) {
-                    runBlocking { localDataSource.deleteMedia(mediaModel.uri) }
+            val filteredMediaList = mediaList.filter { media ->
+                if (context.isMediaExist(media) == null) {
+                    localDataSource.deleteMedia(media.uri)
+                    false
+                } else {
+                    true
                 }
-                isExist
             }
 
             emit(Result.Success(filteredMediaList))

@@ -33,7 +33,7 @@ object PermissionConstants {
         launcher.launch(intent)
     }
 
-    fun handleFolderSelection(
+    fun handleWhatsappFolderSelection(
         result: ActivityResult,
         context: Context,
         viewModel: HomeViewModel

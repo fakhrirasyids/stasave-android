@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SentimentVeryDissatisfied
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -23,7 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.fakhrirasyids.stasave.core.domain.model.MediaModel
 import com.fakhrirasyids.stasave.platform.ui.components.ErrorContent
@@ -38,6 +43,7 @@ fun MediaPagerWidget(
     whatsappVideoMedias: List<MediaModel>,
     isLoading: Boolean,
     isErrorMessage: String,
+    isFromSaved: Boolean = false,
     onNavigateToMediaPreview: ((Int, String, List<MediaModel>) -> Unit)? = null
 ) {
     val scope = rememberCoroutineScope()
@@ -108,13 +114,41 @@ fun MediaPagerWidget(
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.Top
                     ) {
-                        MediaGridWidget(
-                            modifier = modifier,
-                            mediaList = mediaList,
-                            onNavigateToMediaPreview = { index, mediaType ->
-                                onNavigateToMediaPreview?.invoke(index, mediaType, mediaList)
+                        if (mediaList.isEmpty()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    modifier = modifier
+                                        .size(140.dp),
+                                    imageVector = Icons.Filled.SentimentVeryDissatisfied,
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    contentDescription = stringResource(id = com.fakhrirasyids.stasave.common.R.string.app_name)
+                                )
+
+                                Text(
+                                    text = if (isFromSaved) {
+                                        stringResource(id = com.fakhrirasyids.stasave.common.R.string.saved_media_pager_empty)
+                                    } else {
+                                        stringResource(id = com.fakhrirasyids.stasave.common.R.string.home_media_pager_empty)
+                                    },
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontWeight = FontWeight.Bold,
+                                )
                             }
-                        )
+                        } else {
+                            MediaGridWidget(
+                                modifier = modifier,
+                                mediaList = mediaList,
+                                onNavigateToMediaPreview = { index, mediaType ->
+                                    onNavigateToMediaPreview?.invoke(index, mediaType, mediaList)
+                                }
+                            )
+                        }
                     }
                 }
             }

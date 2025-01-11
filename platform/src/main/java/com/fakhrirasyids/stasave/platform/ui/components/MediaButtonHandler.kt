@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -35,8 +36,13 @@ fun MediaButtonHandler(
         verticalAlignment = Alignment.CenterVertically
     ) {
         TransparentButton(
-            icon = if (isFromSaved) Icons.Default.Delete else Icons.Default.KeyboardArrowDown,
-            text = if (isFromSaved) "Delete" else "Download",
+            icon = if (isFromSaved) Icons.Default.Delete else Icons.Default.Download,
+            text = if (isFromSaved) {
+                stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_delete)
+            } else {
+                stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_download)
+            }
+                    ,
             onClick = {
                 if (isFromSaved)
                     onDeleteClick?.invoke()
@@ -47,7 +53,7 @@ fun MediaButtonHandler(
 
         TransparentButton(
             icon = Icons.Default.Share,
-            text = "Share",
+            text = stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_share),
             onClick = { onShareClick?.invoke() }
         )
     }

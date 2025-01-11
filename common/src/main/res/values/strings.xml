@@ -3,10 +3,23 @@
 
     <!-- Home Screen-->
     <string name="home_set_permission">Set Permission</string>
+    <string name="home_media_pager_empty">Whatsapp Statuses is Empty!</string>
+
+    <!-- Saved Screen-->
+    <string name="saved_media_pager_empty">No Saved Media, Download it First!</string>
+
 
     <!-- Media Preview Screen-->
     <string name="media_preview_detail_image">Image Detail</string>
     <string name="media_preview_detail_video">Video Detail</string>
+    <string name="media_preview_detail_video_delete">Delete</string>
+    <string name="media_preview_detail_video_download">Download</string>
+    <string name="media_preview_detail_video_share">Share</string>
+    <string name="media_preview_detail_video_close">Close</string>
+    <string name="media_preview_detail_video_error">Error</string>
+    <string name="media_preview_detail_video_success">Success</string>
+    <string name="media_preview_detail_video_success_download">Download Successful!</string>
+    <string name="media_preview_detail_video_success_delete">Delete Successful!</string>
 
     <!-- Screen Error Message -->
     <string name="saved_media_permission_not_setted">Whatsapp Media Folder is not setted.</string>

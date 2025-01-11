@@ -54,7 +54,7 @@ internal class LocalDataSourceImpl(
         mediaDao.getWhatsappMediasPaging()
 
     override suspend fun insertMedia(mediaEntity: SavedMediaEntity) {
-        savedMediaDao.insertMedia(mediaEntity)
+        savedMediaDao.insertMediaIfNotExists(mediaEntity)
     }
 
     override suspend fun deleteMedia(uri: String) {

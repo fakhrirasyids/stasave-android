@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.fakhrirasyids.stasave.core.domain.model.MediaModel
 import com.fakhrirasyids.stasave.platform.ui.components.TopBanner
 import com.fakhrirasyids.stasave.platform.ui.screens.mediapreview.widgets.MediaPreviewPagerWidget
@@ -102,19 +103,21 @@ fun MediaPreviewScreen(
 
         if (showErrorDialog.value) {
             AlertDialogMedia(
-                showDialog = showSuccessDialog,
-                title = "Error",
-                content = "Download Error! (${errorMessage})",
-                buttonTitle = "Close"
+                showDialog = showErrorDialog,
+                title = stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_error),
+                content = "Error! (${errorMessage})"
             )
         }
 
         if (showSuccessDialog.value) {
             AlertDialogMedia(
                 showDialog = showSuccessDialog,
-                title = "Success",
-                content = "Download Successful!",
-                buttonTitle = "OK"
+                title = stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_success),
+                content = if (isFromSaved) {
+                    stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_success_delete)
+                } else {
+                    stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_success_download)
+                }
             )
         }
     }
@@ -124,8 +127,7 @@ fun MediaPreviewScreen(
 private fun AlertDialogMedia(
     showDialog: MutableState<Boolean>,
     title: String,
-    content: String,
-    buttonTitle: String,
+    content: String
 ) {
     AlertDialog1(
         onDismissRequest = {
@@ -139,7 +141,10 @@ private fun AlertDialogMedia(
         },
         confirmButton = {
             TextButton(onClick = { showDialog.value = false }) {
-                Text(text = buttonTitle, color = MaterialTheme.colorScheme.onPrimary)
+                Text(
+                    text = stringResource(com.fakhrirasyids.stasave.common.R.string.media_preview_detail_video_close),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         },
         containerColor = MaterialTheme.colorScheme.background,

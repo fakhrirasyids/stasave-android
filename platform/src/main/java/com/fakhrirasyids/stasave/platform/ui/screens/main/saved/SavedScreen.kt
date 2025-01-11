@@ -31,10 +31,10 @@ fun SavedScreen(
     val savedImageMedias by savedViewModel.savedImageMedias
     val errorMessage by savedViewModel.errorMessage
 
-    val openDocumentTreeLauncher = rememberLauncherForActivityResult(
+    val openDocumentTreeWhatsappLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
-            PermissionConstants.handleFolderSelection(result, context, homeViewModel)
+            PermissionConstants.handleWhatsappFolderSelection(result, context, homeViewModel)
         }
     )
 
@@ -53,14 +53,15 @@ fun SavedScreen(
 
         PermissionWrapper(
             isWhatsappSavedUriPermissionGranted = whatsappUri,
-            documentTreeLauncher = openDocumentTreeLauncher
+            documentTreeWhatsappLauncher = openDocumentTreeWhatsappLauncher,
         ) {
             MediaPagerWidget(
-                documentTreeLauncher = openDocumentTreeLauncher,
+                documentTreeLauncher = openDocumentTreeWhatsappLauncher,
                 whatsappImageMedias = savedImageMedias,
                 whatsappVideoMedias = savedVideoMedias,
                 isLoading = isLoading,
                 isErrorMessage = errorMessage,
+                isFromSaved = true,
                 onNavigateToMediaPreview = { index, mediaType, mediaList ->
                     onNavigateToMediaPreview?.invoke(index, mediaType, mediaList)
                 }
