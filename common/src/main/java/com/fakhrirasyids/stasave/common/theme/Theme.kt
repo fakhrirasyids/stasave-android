@@ -8,12 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color.Companion.White
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryDarkGreen,
-    secondary = PrimaryDarkGray,
+    primary = SoftWhite,
+    secondary = LightGreen,
     tertiary = Cyan,
     background = PrimaryDarkGreen,
     onPrimary = Cream
-
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -23,17 +22,6 @@ private val LightColorScheme = lightColorScheme(
     background = White,
     onPrimary = PrimaryDarkGray,
     onSurface = SoftWhite,
-
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
 
 @Composable
@@ -42,7 +30,7 @@ fun StasaveTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        darkTheme -> LightColorScheme // Change Later, For testing only
+        darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
 

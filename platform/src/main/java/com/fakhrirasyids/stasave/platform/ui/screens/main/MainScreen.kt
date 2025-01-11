@@ -70,7 +70,9 @@ fun MainScreen(
                 }
 
                 com.fakhrirasyids.stasave.platform.utils.enums.MainScreen.Settings.name -> {
-                    SettingsScreen()
+                    SettingsScreen(
+                        homeViewModel = homeViewModel
+                    )
                 }
             }
         }
