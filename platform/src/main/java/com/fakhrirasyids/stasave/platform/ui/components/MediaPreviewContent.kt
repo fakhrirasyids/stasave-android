@@ -3,11 +3,15 @@ package com.fakhrirasyids.stasave.platform.ui.components
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -29,58 +33,63 @@ fun MediaPreviewContent(
     modifier: Modifier = Modifier,
     mediaModel: MediaModel,
     exoPlayer: ExoPlayer? = null,
-    isPlaying: Boolean = false
+    isPlaying: Boolean = false,
+    isFromSaved: Boolean = false,
+    onDownloadClick: ((MediaModel) -> Unit)? = null,
+    onDeleteClick: ((MediaModel) -> Unit)? = null,
+    onShareClick: ((MediaModel) -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
-    if (mediaModel.fileType == MediaType.IMAGE.name.lowercase()) {
-        val imagePainter = rememberAsyncImagePainter(
-            model = mediaModel.uri.toUri()
-        )
+    Column(modifier = modifier) {
+        if (mediaModel.fileType == MediaType.IMAGE.name.lowercase()) {
+            val imagePainter = rememberAsyncImagePainter(
+                model = mediaModel.uri.toUri()
+            )
 
-        Image(
-            painter = imagePainter,
-            contentDescription = "Media Content",
-            modifier = modifier,
-        )
-    } else {
-        val playerView = remember {
-            exoPlayer?.apply {
-                val mediaItem = MediaItem.fromUri(Uri.parse(mediaModel.uri))
-                setMediaItem(mediaItem)
-                prepare()
-                playWhenReady = isPlaying
-                seekTo(0L)
-                addListener(object : Player.Listener {
-                    override fun onPlayerError(error: PlaybackException) {
-                        handleError(error)
-                    }
-                })
-            }
-
-            PlayerView(context).apply {
-                this.player = exoPlayer
-            }
-        }
-
-        ComposableLifecycle { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_PAUSE -> {
-                    exoPlayer?.pause()
-                }
-                else -> {}
-            }
-        }
-
-        DisposableEffect(exoPlayer) {
-            onDispose {
-                exoPlayer?.stop()
-            }
-        }
-
-        Column {
-            AndroidView(
+            Image(
+                painter = imagePainter,
+                contentDescription = "Media Content",
                 modifier = modifier,
+            )
+        } else {
+            val playerView = remember {
+                exoPlayer?.apply {
+                    val mediaItem = MediaItem.fromUri(Uri.parse(mediaModel.uri))
+                    setMediaItem(mediaItem)
+                    prepare()
+                    playWhenReady = isPlaying
+                    seekTo(0L)
+                    addListener(object : Player.Listener {
+                        override fun onPlayerError(error: PlaybackException) {
+                            handleError(error)
+                        }
+                    })
+                }
+
+                PlayerView(context).apply {
+                    this.player = exoPlayer
+                }
+            }
+
+            ComposableLifecycle { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_PAUSE -> {
+                        exoPlayer?.pause()
+                    }
+
+                    else -> {}
+                }
+            }
+
+            DisposableEffect(exoPlayer) {
+                onDispose {
+                    exoPlayer?.stop()
+                }
+            }
+
+            AndroidView(
+                modifier = Modifier.weight(1F),
                 factory = {
                     playerView
                 },
@@ -89,6 +98,22 @@ fun MediaPreviewContent(
                 }
             )
         }
+
+        MediaButtonHandler(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            isFromSaved = isFromSaved,
+            onDownloadClick = {
+                onDownloadClick?.invoke(mediaModel)
+            },
+            onDeleteClick = {
+                onDeleteClick?.invoke(mediaModel)
+            },
+            onShareClick = {
+                onShareClick?.invoke(mediaModel)
+            }
+        )
     }
 }
 

@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 val PrimaryWhite = Color(0xFFFFFFFF)
 val PrimaryGreen = Color(0xFF25d366)
 val PrimaryDarkGray = Color(0xFF232D36)
-val SoftWhite = Color(0xFFF1F1F1)
+val SoftWhite = Color(0xFFCBCBCB)
 
 // Light Theme
 val DarkGreen = Color(0xFF075e54)

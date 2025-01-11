@@ -54,4 +54,7 @@ dependencies {
     // Media3
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
+
+    // Extended Icons
+    implementation(libs.androidx.material.icons.extended)
 }

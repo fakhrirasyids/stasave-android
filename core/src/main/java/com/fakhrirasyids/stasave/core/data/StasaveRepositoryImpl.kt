@@ -5,13 +5,13 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import androidx.lifecycle.map
 import com.fakhrirasyids.stasave.core.data.local.LocalDataSource
 import com.fakhrirasyids.stasave.core.data.local.room.entity.MediaEntity
 import com.fakhrirasyids.stasave.core.domain.model.MediaModel
 import com.fakhrirasyids.stasave.core.domain.repository.StasaveRepository
 import com.fakhrirasyids.stasave.core.utils.constants.FileConstants
 import com.fakhrirasyids.stasave.core.utils.constants.FileConstants.deleteMedia
+import com.fakhrirasyids.stasave.core.utils.constants.FileConstants.isMediaExist
 import com.fakhrirasyids.stasave.core.utils.constants.FileConstants.saveMedia
 import com.fakhrirasyids.stasave.core.utils.enums.MediaType
 import com.fakhrirasyids.stasave.core.utils.helper.Result
@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 
 internal class StasaveRepositoryImpl(
@@ -44,7 +45,12 @@ internal class StasaveRepositoryImpl(
 
                 val whatsappDirectory = DocumentFile.fromTreeUri(context, whatsappUriParsed)
                 if (whatsappDirectory == null || !whatsappDirectory.exists() || !whatsappDirectory.isDirectory) {
-                    throw IllegalArgumentException(ContextCompat.getString(context, com.fakhrirasyids.stasave.common.R.string.invalid_whatsapp_directory))
+                    throw IllegalArgumentException(
+                        ContextCompat.getString(
+                            context,
+                            com.fakhrirasyids.stasave.common.R.string.invalid_whatsapp_directory
+                        )
+                    )
                 }
 
                 runBlocking { localDataSource.deleteAllMedias() }
@@ -53,7 +59,10 @@ internal class StasaveRepositoryImpl(
                 whatsappDirectory.listFiles().forEach { file ->
                     if (file.name != ".nomedia" && file.isFile) {
                         val fileType = when {
-                            FileConstants.getFileExtension(file.name ?: "") == "mp4" -> MediaType.VIDEO.name.lowercase()
+                            FileConstants.getFileExtension(
+                                file.name ?: ""
+                            ) == "mp4" -> MediaType.VIDEO.name.lowercase()
+
                             else -> MediaType.IMAGE.name.lowercase()
                         }
 
@@ -67,8 +76,12 @@ internal class StasaveRepositoryImpl(
                 }
 
                 runBlocking { localDataSource.insertWhatsappMedias(whatsappMediaList) }
+                val savedWhatsappMediaList = runBlocking {
+                    localDataSource.getWhatsappMediasPaging()
+                        .map { listMedia -> listMedia.map { it.toMediaModel() } }.first()
+                }
 
-                emit(Result.Success(whatsappMediaList.map { it.toMediaModel() }))
+                emit(Result.Success(savedWhatsappMediaList))
             } catch (e: IllegalArgumentException) {
                 emit(Result.Error(e.message ?: "Unknown Error"))
             } catch (e: Exception) {
@@ -94,11 +107,12 @@ internal class StasaveRepositoryImpl(
         emit(Result.Loading)
         try {
             val isSuccessfullySaved = context.saveMedia(mediaModel)
-            if (isSuccessfullySaved) {
-                localDataSource.insertMedia(mediaModel.toSavedMediaEntity())
+            if (isSuccessfullySaved != null) {
+                mediaModel.uri = isSuccessfullySaved
+                runBlocking { localDataSource.insertMedia(mediaModel.toSavedMediaEntity()) }
                 emit(Result.Success(true))
             } else {
-                emit(Result.Error("Failed to save media"))
+                emit(Result.Error("Failed to Download Media!"))
             }
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Unknown Error"))
@@ -113,33 +127,57 @@ internal class StasaveRepositoryImpl(
         try {
             val isSuccessfullyDeleted = context.deleteMedia(mediaModel.fileName)
             if (isSuccessfullyDeleted) {
-                localDataSource.deleteMedia(mediaModel.id)
+                runBlocking { localDataSource.deleteMedia(mediaModel.uri) }
                 emit(Result.Success(true))
             } else {
-                emit(Result.Error("Failed to delete media"))
+                emit(Result.Error("Media already Deleted"))
             }
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Unknown Error"))
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getAllImageMedia(): Flow<Result<List<MediaModel>>> = flow {
+    override fun getAllImageMedia(context: Context): Flow<Result<List<MediaModel>>> = flow {
         emit(Result.Loading)
         try {
-            val mediaList = localDataSource.getAllImageMedia()
-                .map { it.map { entity -> entity.toMediaModel() } }.value ?: listOf()
-            emit(Result.Success(mediaList))
+            val mediaList = runBlocking {
+                localDataSource.getAllImageMedia()
+                    .map { it.map { entity -> entity.toMediaModel() } }.first().toMutableList()
+            }
+
+            val filteredMediaList = mediaList.filter { media ->
+                if (context.isMediaExist(media) == null) {
+                    localDataSource.deleteMedia(media.uri)
+                    false
+                } else {
+                    true
+                }
+            }
+
+            emit(Result.Success(filteredMediaList))
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Unknown Error"))
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getAllVideoMedia(): Flow<Result<List<MediaModel>>> = flow {
+    override fun getAllVideoMedia(context: Context): Flow<Result<List<MediaModel>>> = flow {
         emit(Result.Loading)
         try {
-            val mediaList = localDataSource.getAllVideoMedia()
-                .map { it.map { entity -> entity.toMediaModel() } }.value ?: listOf()
-            emit(Result.Success(mediaList))
+            val mediaList = runBlocking {
+                localDataSource.getAllVideoMedia()
+                    .map { it.map { entity -> entity.toMediaModel() } }.first().toMutableList()
+            }
+
+            val filteredMediaList = mediaList.filter { media ->
+                if (context.isMediaExist(media) == null) {
+                    localDataSource.deleteMedia(media.uri)
+                    false
+                } else {
+                    true
+                }
+            }
+
+            emit(Result.Success(filteredMediaList))
         } catch (e: Exception) {
             emit(Result.Error(e.message ?: "Unknown Error"))
         }

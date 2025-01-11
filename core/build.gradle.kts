@@ -53,10 +53,6 @@ dependencies {
     implementation(libs.androidx.paging.runtime.ktx)
     annotationProcessor(libs.androidx.room.compiler)
 
-    // SQLCipher
-    implementation(libs.android.database.sqlcipher)
-    implementation(libs.androidx.sqlite.ktx)
-
     // DocumentFile
     implementation (libs.androidx.documentfile)
 }

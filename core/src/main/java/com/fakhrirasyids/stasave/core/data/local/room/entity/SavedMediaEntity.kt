@@ -6,8 +6,7 @@ import com.fakhrirasyids.stasave.core.utils.enums.MediaType
 
 @Entity(tableName = "saved_media")
 internal data class SavedMediaEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
     val uri: String,
     val fileName: String,
     val fileType: String = MediaType.IMAGE.name.lowercase(),

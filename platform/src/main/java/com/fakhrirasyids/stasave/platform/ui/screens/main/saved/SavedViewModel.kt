@@ -1,6 +1,7 @@
-package com.fakhrirasyids.stasave.platform.ui.screens.mediapreview
+package com.fakhrirasyids.stasave.platform.ui.screens.main.saved
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -11,11 +12,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.fakhrirasyids.stasave.core.utils.helper.Result
 
-class MediaPreviewViewModel(
+class SavedViewModel(
     private val savedMediaUseCase: SavedMediaUseCase,
 ) : ViewModel() {
-    private val _isSuccessful = mutableStateOf(false)
-    val isSuccessful: State<Boolean> = _isSuccessful
+    private val _savedImageMedias = mutableStateOf(listOf<MediaModel>())
+    val savedImageMedias: State<List<MediaModel>> = _savedImageMedias
+
+    private val _savedVideoMedias = mutableStateOf(listOf<MediaModel>())
+    val savedVideoMedias: State<List<MediaModel>> = _savedVideoMedias
 
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
@@ -23,52 +27,46 @@ class MediaPreviewViewModel(
     private val _errorMessage = mutableStateOf("")
     val errorMessage: State<String> = _errorMessage
 
-    fun saveMedia(context: Context, mediaModel: MediaModel) {
+    fun getAllSavedImages(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            savedMediaUseCase.insertMedia(context, mediaModel).collect { result ->
+            savedMediaUseCase.getAllImageMedia(context).collect { result ->
                 when (result) {
                     is Result.Loading -> {
                         _isLoading.value = true
                         _errorMessage.value = ""
-                        _isSuccessful.value = false
                     }
 
                     is Result.Success -> {
                         _isLoading.value = false
-                        _errorMessage.value = ""
-                        _isSuccessful.value = true
+                        _savedImageMedias.value = result.data
                     }
 
                     is Result.Error -> {
                         _isLoading.value = false
                         _errorMessage.value = result.error
-                        _isSuccessful.value = false
                     }
                 }
             }
         }
     }
 
-    fun deleteMedia(context: Context, mediaModel: MediaModel) {
+    fun getAllSavedVideos(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            savedMediaUseCase.deleteMedia(context, mediaModel).collect { result ->
+            savedMediaUseCase.getAllVideoMedia(context).collect { result ->
                 when (result) {
                     is Result.Loading -> {
                         _isLoading.value = true
                         _errorMessage.value = ""
-                        _isSuccessful.value = false
                     }
 
                     is Result.Success -> {
                         _isLoading.value = false
-                        _errorMessage.value = ""
-                        _isSuccessful.value = true
+                        _savedVideoMedias.value = result.data
                     }
 
                     is Result.Error -> {
                         _isLoading.value = false
                         _errorMessage.value = result.error
-                        _isSuccessful.value = false
                     }
                 }
             }

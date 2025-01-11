@@ -54,13 +54,14 @@ fun StasaveApp(
             // Home Route
             composable(route = Screen.Main.route) {
                 MainScreen(
-                    onNavigateToMediaPreview = { selectedItem, mediaTypeName, mediaList ->
+                    onNavigateToMediaPreview = { selectedItem, mediaTypeName, mediaList, isFromSaved ->
                         val mediaListUri = Uri.encode(Gson().toJson(mediaList))
                         navController.navigate(
                             Screen.MediaPreview.createRoute(
                                 selectedItem,
                                 mediaTypeName,
-                                mediaListUri
+                                mediaListUri,
+                                isFromSaved
                             )
                         )
                     }
@@ -79,7 +80,10 @@ fun StasaveApp(
                     ) { type = NavType.StringType },
                     navArgument(Screen.EXTRA_MEDIA_PREVIEW_LIST) {
                         type = AssetParamType()
-                    }
+                    },
+                    navArgument(
+                        Screen.EXTRA_MEDIA_IS_FROM_SAVED,
+                    ) { type = NavType.BoolType },
                 )
             ) { backStackEntry ->
                 val selectedItemIndex =
@@ -87,6 +91,8 @@ fun StasaveApp(
                         ?: 0
                 val mediaTypeName =
                     backStackEntry.arguments?.getString(Screen.EXTRA_MEDIA_PREVIEW_TYPE_NAME) ?: ""
+                val isFromSaved =
+                    backStackEntry.arguments?.getBoolean(Screen.EXTRA_MEDIA_IS_FROM_SAVED) ?: false
                 val mediaList =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         backStackEntry.arguments?.getParcelableArrayList(
@@ -104,6 +110,7 @@ fun StasaveApp(
                     selectedItemIndex = selectedItemIndex,
                     mediaTypeName = mediaTypeName,
                     mediaList = mediaList,
+                    isFromSaved = isFromSaved,
                     onBackClick = {
                         navController.navigateUp()
                     }

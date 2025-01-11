@@ -20,8 +20,6 @@ import com.fakhrirasyids.stasave.core.domain.usecase.SavedMediaInteractor
 import com.fakhrirasyids.stasave.core.domain.usecase.SavedMediaUseCase
 import com.fakhrirasyids.stasave.core.domain.usecase.WhatsappUriInteractor
 import com.fakhrirasyids.stasave.core.domain.usecase.WhatsappUriUseCase
-import net.sqlcipher.database.SQLiteDatabase
-import net.sqlcipher.database.SupportFactory
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -35,15 +33,10 @@ val databaseModules = module {
     factory { get<StasaveDatabase>().mediaDao() }
     factory { get<StasaveDatabase>().savedMediaDao() }
     single {
-        val passphrase: ByteArray =
-            SQLiteDatabase.getBytes(BuildConfig.STASAVE_DATABASE_KEY.toCharArray())
-        val factory = SupportFactory(passphrase)
-
         Room.databaseBuilder(
             androidContext(),
             StasaveDatabase::class.java, BuildConfig.DATABASE_NAME
         ).fallbackToDestructiveMigration()
-            .openHelperFactory(factory)
             .build()
     }
 }
