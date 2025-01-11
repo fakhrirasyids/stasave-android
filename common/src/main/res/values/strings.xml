@@ -26,6 +26,18 @@
     <string name="home_permission_not_setted">Permission is not setted.</string>
     <string name="screen_whatsapp_directory">Whatsapp Folder is Incorrect!</string>
 
+    <!-- Tutorial Instructions -->
+    <string name="tutorial_title_1">1. Initializing Permissions &amp; Folder</string>
+    <string name="tutorial_title_1_instructions_1">Accept all the necessary permission that has been requested.</string>
+    <string name="tutorial_title_1_instructions_2">Allow app to get Whatsapp Statuses from the detected Whatsapp Folder.</string>
+    <string name="tutorial_title_2">2. Downloading Whatsapp Statuses</string>
+    <string name="tutorial_title_2_instructions_1">On the bottom menu, select the Home menu.</string>
+    <string name="tutorial_title_2_instructions_2">After you select one of the Whatsapp Status, on the bottom of the screen there are two buttons, you can download or share with these buttons.</string>
+    <string name="tutorial_title_3">3. Viewing Downloaded Whatsapp Statuses</string>
+    <string name="tutorial_title_3_instructions_1">You can either view the downloaded statuses from your gallery or from the Saved menu.</string>
+    <string name="tutorial_title_4">4. Deleting Whatsapp Statuses</string>
+    <string name="tutorial_title_4_instructions_1">After you select one of the Whatsapp Status from Saved menu, on the bottom of the screen there are two buttons, you can delete or share with these buttons.</string>
+
     <!-- System Error Message -->
     <string name="invalid_whatsapp_directory">The specified WhatsApp URI is not a valid directory.</string>
 </resources>

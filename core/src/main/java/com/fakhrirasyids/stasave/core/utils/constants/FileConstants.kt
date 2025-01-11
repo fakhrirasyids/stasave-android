@@ -30,11 +30,8 @@ internal object FileConstants {
 
         val existingUri = getExistingMediaUri(model.fileName, mimeType)
         if (existingUri != null) {
-            Log.e("FTEST", "saveMediaOnAndroidQAndAbove ADA: $existingUri", )
             return existingUri.toString()
-//            contentResolver.delete(existingUri, null, null)
         }
-        Log.e("FTEST", "saveMediaOnAndroidQAndAbove NULL: $existingUri", )
 
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
@@ -82,18 +79,13 @@ internal object FileConstants {
         var allDeleted = true
 
         appFolder.listFiles()?.forEach { file ->
-            // Skip the file with suffix (1)
             if (file.name.matches(regexToKeep)) {
-                Log.e("FTEST", "Skipping file with suffix (1): ${file.name}")
                 return@forEach
             }
 
-            // Delete files matching the deletion regex
             if (file.name.matches(regexToDelete)) {
-                Log.e("FTEST", "Deleting file: ${file.name}")
                 if (!file.delete()) {
-                    allDeleted = false // Track if any deletion fails
-                    Log.e("FTEST", "Failed to delete: ${file.name}")
+                    allDeleted = false
                 }
             }
         }
@@ -122,7 +114,6 @@ internal object FileConstants {
             selectionArgs,
             null
         )?.use { cursor ->
-            Log.e("FTEST", "getExistingMediaUri: ${cursor.position}", )
             if (cursor.moveToFirst()) {
                 val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
                 return ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"), id)
